@@ -1,6 +1,7 @@
 import pylab
 import numpy
 import matplotlib as plt
+from MLP import *
 
 
 def readFile(file,amountOfData):
@@ -20,8 +21,6 @@ def readFile(file,amountOfData):
                 ir[counter_2].append(table[counter])
                 counter += 1
             counter_2 += 1
-        for x in ir:
-             print(x)
         return ir
 
 
@@ -30,4 +29,24 @@ def readFile(file,amountOfData):
 
 
 #Execuate Code
-readFile("Iris.txt",5)
+ir = readFile("Iris.txt",5)
+
+def main():
+    pattern = [
+        [[1,0,0,0], [1,0,0,0]],
+        [[0,1,0,0], [0,1,0,0]],
+        [[0,0,1,0], [0,0,1,0]],
+        [[0,0,0,1], [0,0,0,1]]
+    ]
+
+    # create a network with two input, two hidden, and one output nodes
+    neuralNetwork = NeuralNetwork(4, 5, 4)
+    # train it with some patterns
+    neuralNetwork.train(pattern)
+    # test it
+    neuralNetwork.test(pattern)
+    neuralNetwork.weights()
+
+
+if __name__ == '__main__':
+    main()
