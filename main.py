@@ -29,7 +29,7 @@ def readFile(file,amountOfData):
 
 
 def createTrainData(testAmount= 100):
-
+    random.seed()
     ir = readFile("Iris.txt",5)
     table = []
     #Setos ->      [1,0,0,0]
