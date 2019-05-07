@@ -1,5 +1,5 @@
 import pylab
-import numpy
+import numpy as np
 import matplotlib as plt
 from MLP import *
 
@@ -28,24 +28,51 @@ def readFile(file,amountOfData):
         print("File not found")
 
 
-#Execuate Code
-ir = readFile("Iris.txt",5)
+def createTrainData(testAmount= 100):
+
+    ir = readFile("Iris.txt",5)
+    table = []
+    #Setos ->      [1,0,0,0]
+    #Versicolor -> [0,1,0,0]
+    #Verginica ->  [0,0,1,0]
+    i = 0
+    while i<testAmount:
+        i += 1
+        ran = random.randint(1,149)
+        b = []
+        d = []
+        b.append(float(ir[ran][0]))
+        b.append(float(ir[ran][1]))
+        b.append(float(ir[ran][2]))
+        b.append(float(ir[ran][3]))
+        d.append(b)
+        if ir[ran][4] == "Iris-setosa":
+            d.append([1,0,0,0])
+            print("Setosa")
+        elif ir[ran][4] == "Iris-versicolor":
+            d.append([0,1,0,0])
+            print("Versicolor")
+        else:
+            d.append([0,0,1,0])
+            print("Verginica")
+        table.append(d)
+    return table
+
+
+
 
 def main():
-    pattern = [
-        [[1,0,0,0], [1,0,0,0]],
-        [[0,1,0,0], [0,1,0,0]],
-        [[0,0,1,0], [0,0,1,0]],
-        [[0,0,0,1], [0,0,0,1]]
-    ]
 
-    # create a network with two input, two hidden, and one output nodes
-    neuralNetwork = NeuralNetwork(4, 5, 4)
+    pattern = createTrainData()
+    neuralNetwork = NeuralNetwork(4, 3, 4)
     # train it with some patterns
     neuralNetwork.train(pattern)
     # test it
     neuralNetwork.test(pattern)
-    neuralNetwork.weights()
+
+
+
+
 
 
 if __name__ == '__main__':

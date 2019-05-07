@@ -1,6 +1,8 @@
 import math
 import random
 import string
+import numpy as np
+import pylab
 
 random.seed(0)
 
@@ -56,8 +58,8 @@ class NeuralNetwork:
 
         # input activations
         for i in range(self.ni-1):
-            self.ai[i] = sigmoid(inputs[i])
-            #self.ai[i] = inputs[i]
+            #self.ai[i] = sigmoid(inputs[i])
+            self.ai[i] = inputs[i]
 
         # hidden activations
         for j in range(self.nh):
@@ -117,8 +119,43 @@ class NeuralNetwork:
 
 
     def test(self, patterns):
+        tableSe = []
+        tableVer = []
+        tableveg = []
         for p in patterns:
-            print(p[0], '->', self.update(p[0]))
+            up = self.update(p[0])
+            print(p[0], '->', up)
+            if np.max(up)== up[0]:
+                tableSe.append(p[0])
+            elif np.max(up) == up[1]:
+                tableVer.append(p[0])
+            else:
+                tableveg.append(p[0])
+        tableX = []
+        tableX1 = []
+        tableX2 = []
+        for x in tableSe:
+            tableX.append(x[0])
+        for x in tableveg:
+            tableX1.append(x[0])
+        for x in tableVer:
+            tableX2.append(x[0])
+        tableY = []
+        tableY1 = []
+        tableY2 = []
+        for x in tableSe:
+            tableY.append(x[1])
+        for x in tableveg:
+            tableY1.append(x[1])
+        for x in tableVer:
+            tableY2.append(x[1])
+        pylab.plot(tableX, tableY,'ro', color='blue')
+        pylab.plot(tableX1,tableY1,'ro', color = 'green')
+        pylab.plot(tableX2,tableY2, 'ro')
+        pylab.grid(True)
+        pylab.show()
+
+
 
     def weights(self):
         print('Input weights:')
@@ -129,7 +166,7 @@ class NeuralNetwork:
         for j in range(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations=1000, N=0.5, M=0.1):
+    def train(self, patterns, iterations=1000, N=0.3, M=0.1):
         # N: learning rate
         # M: momentum factor
         for i in range(iterations):
