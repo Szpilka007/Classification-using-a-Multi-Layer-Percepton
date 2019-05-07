@@ -123,14 +123,14 @@ class NeuralNetwork:
         tableVer = []
         tableveg = []
         for p in patterns:
-            up = self.update(p[0])
-            print(p[0], '->', up)
+            up = self.update(p)
+            print(p, '->', up)
             if np.max(up)== up[0]:
-                tableSe.append(p[0])
+                tableSe.append(p)
             elif np.max(up) == up[1]:
-                tableVer.append(p[0])
+                tableVer.append(p)
             else:
-                tableveg.append(p[0])
+                tableveg.append(p)
         tableX = []
         tableX1 = []
         tableX2 = []
@@ -149,9 +149,9 @@ class NeuralNetwork:
             tableY1.append(x[1])
         for x in tableVer:
             tableY2.append(x[1])
-        pylab.plot(tableX, tableY,'ro', color='blue')
-        pylab.plot(tableX1,tableY1,'ro', color = 'green')
-        pylab.plot(tableX2,tableY2, 'ro')
+        pylab.plot(tableX, tableY,'ro', color='green')
+        pylab.plot(tableX1,tableY1,'ro', color = 'blue')
+        pylab.plot(tableX2,tableY2, 'ro', color = 'red')
         pylab.grid(True)
         pylab.show()
 

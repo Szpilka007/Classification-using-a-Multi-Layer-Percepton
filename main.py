@@ -28,7 +28,7 @@ def readFile(file,amountOfData):
         print("File not found")
 
 
-def createTrainData(testAmount= 100):
+def createTrainData(testAmount= 30):
     random.seed()
     ir = readFile("Iris.txt",5)
     table = []
@@ -58,17 +58,33 @@ def createTrainData(testAmount= 100):
         table.append(d)
     return table
 
-
+def createTestData():
+    ir = readFile("Iris.txt",5)
+    i = 0
+    d = []
+    while i<150:
+        b = []
+        b.append(float(ir[i][0]))
+        b.append(float(ir[i][1]))
+        b.append(float(ir[i][2]))
+        b.append(float(ir[i][3]))
+        d.append(b)
+        i += 1
+    print(len(d))
+    return d
 
 
 def main():
 
     pattern = createTrainData()
+    testData = createTestData()
     neuralNetwork = NeuralNetwork(4, 3, 4)
     # train it with some patterns
     neuralNetwork.train(pattern)
     # test it
-    neuralNetwork.test(pattern)
+    neuralNetwork.test(testData)
+
+    #neuralNetwork.test()
 
 
 
