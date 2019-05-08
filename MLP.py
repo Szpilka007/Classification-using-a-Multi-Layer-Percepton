@@ -3,7 +3,7 @@ import random
 import string
 import numpy as np
 import pylab
-
+from main import printChapterOfClasification
 random.seed(0)
 
 # calculate a random number where:  a <= rand < b
@@ -118,7 +118,7 @@ class NeuralNetwork:
         return error
 
 
-    def test(self, patterns):
+    def testAndClassfication(self, patterns):
         tableSe = []
         tableVer = []
         tableveg = []
@@ -131,31 +131,7 @@ class NeuralNetwork:
                 tableVer.append(p)
             else:
                 tableveg.append(p)
-        tableX = []
-        tableX1 = []
-        tableX2 = []
-        for x in tableSe:
-            tableX.append(x[0])
-        for x in tableveg:
-            tableX1.append(x[0])
-        for x in tableVer:
-            tableX2.append(x[0])
-        tableY = []
-        tableY1 = []
-        tableY2 = []
-        for x in tableSe:
-            tableY.append(x[1])
-        for x in tableveg:
-            tableY1.append(x[1])
-        for x in tableVer:
-            tableY2.append(x[1])
-        pylab.plot(tableX, tableY,'ro', color='green')
-        pylab.plot(tableX1,tableY1,'ro', color = 'blue')
-        pylab.plot(tableX2,tableY2, 'ro', color = 'red')
-        pylab.grid(True)
-        pylab.show()
-
-
+        printChapterOfClasification(tableSe,tableveg,tableVer)
 
     def weights(self):
         print('Input weights:')
@@ -166,9 +142,10 @@ class NeuralNetwork:
         for j in range(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations=1000, N=0.3, M=0.1):
+    def train(self, patterns, iterations=10000, N=0.1, M=0.01):
         # N: learning rate
         # M: momentum factor
+        errors = []
         for i in range(iterations):
             error = 0.0
             for p in patterns:
@@ -177,4 +154,6 @@ class NeuralNetwork:
                 self.update(inputs)
                 error = error + self.backPropagate(targets, N, M)
             if i % 100 == 0:
-                print('error %-.5f' % error)
+                errors.append(error)
+                print(error)
+        return errors

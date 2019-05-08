@@ -27,8 +27,41 @@ def readFile(file,amountOfData):
     except FileNotFoundError:
         print("File not found")
 
+def printChapterError(table):
 
-def createTrainData(testAmount= 30):
+    pylab.plot(table)
+    pylab.grid(True)
+    pylab.xlabel("Epochs X 100")
+    pylab.ylabel("Error")
+    pylab.show()
+    pylab.title("Errors of training")
+
+def printChapterOfClasification(table1,table2,table3):
+    tableX = []
+    tableX1 = []
+    tableX2 = []
+    for x in table1:
+        tableX.append(x[2])
+    for x in table2:
+        tableX1.append(x[2])
+    for x in table3:
+        tableX2.append(x[2])
+    tableY = []
+    tableY1 = []
+    tableY2 = []
+    for x in table1:
+        tableY.append(x[3])
+    for x in table2:
+        tableY1.append(x[3])
+    for x in table3:
+        tableY2.append(x[3])
+    pylab.plot(tableX, tableY,'ro', color='green')
+    pylab.plot(tableX1,tableY1,'ro', color = 'blue')
+    pylab.plot(tableX2,tableY2, 'ro', color = 'red')
+    pylab.grid(True)
+    pylab.show()
+
+def createTrainData(testAmount):
     random.seed()
     ir = readFile("Iris.txt",5)
     table = []
@@ -48,13 +81,10 @@ def createTrainData(testAmount= 30):
         d.append(b)
         if ir[ran][4] == "Iris-setosa":
             d.append([1,0,0,0])
-            print("Setosa")
         elif ir[ran][4] == "Iris-versicolor":
             d.append([0,1,0,0])
-            print("Versicolor")
         else:
             d.append([0,0,1,0])
-            print("Verginica")
         table.append(d)
     return table
 
@@ -70,25 +100,29 @@ def createTestData():
         b.append(float(ir[i][3]))
         d.append(b)
         i += 1
-    print(len(d))
     return d
 
 
 def main():
 
-    pattern = createTrainData()
+    #dates nedeed to program
+    amountOfTestData = 30
+    iterations = 10000
+    learingRate = 0.01
+    momentumFactor = 0.1
+    # Dates needed to creating MLP
+    inputNodes = 4
+    hiddenNeurons = 4
+    outputNodes = 4
+
+
+    pattern = createTrainData(amountOfTestData)
     testData = createTestData()
-    neuralNetwork = NeuralNetwork(4, 3, 4)
-    # train it with some patterns
-    neuralNetwork.train(pattern)
-    # test it
-    neuralNetwork.test(testData)
 
-    #neuralNetwork.test()
-
-
-
-
+    neuralNetwork = NeuralNetwork(inputNodes, hiddenNeurons, outputNodes)
+    erors = neuralNetwork.train(pattern,iterations,learingRate,momentumFactor)
+    neuralNetwork.testAndClassfication(testData)
+    printChapterError(erors)
 
 
 if __name__ == '__main__':
