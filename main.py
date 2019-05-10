@@ -27,6 +27,43 @@ def readFile(file,amountOfData):
     except FileNotFoundError:
         print("File not found")
 
+def wczytanie():
+    try:
+        table = []
+        with open("Iris.txt", "r") as f:
+            lista_linii = [line.rstrip("\n") for line in f]
+            for linia in lista_linii:
+                for pole in linia.split(","):
+                    table.append(pole)
+
+        print(len(table))
+
+        ir = [[]]
+        licznik = 0
+        licznik_2 = 0
+
+        while licznik < len(table):
+            if licznik % 5 != 4:
+                ir[licznik_2].append(float(table[licznik]))
+                licznik += 1
+            else:
+                if licznik + 1 != len(table):
+                    ir[licznik_2].append(table[licznik])
+                    ir.append([])
+                    licznik += 1
+                    licznik_2 += 1
+                else:
+                    ir[licznik_2].append(table[licznik])
+                    licznik += 1
+                    licznik_2 += 1
+
+        return ir
+
+
+
+    except FileNotFoundError:
+        print("File not found")
+
 def printChapterError(table):
 
     pylab.plot(table)
@@ -36,7 +73,27 @@ def printChapterError(table):
     pylab.show()
     pylab.title("Errors of training")
 
+def podziel_na(ir):
+    table_setosa = []
+    table_versicolor = []
+    table_verginica = []
+
+    licznik = 0
+    for x in range(len(ir)):
+        if ir[licznik][4] == "Iris-setosa":
+            table_setosa.append(ir[licznik])
+            licznik += 1
+        elif ir[licznik][4] == "Iris-versicolor":
+            table_versicolor.append(ir[licznik])
+            licznik += 1
+        else:
+            table_verginica.append(ir[licznik])
+            licznik += 1
+
+    return table_setosa,table_versicolor,table_verginica
+
 def printChapterOfClasification(table1,table2,table3):
+
     tableX = []
     tableX1 = []
     tableX2 = []
@@ -55,9 +112,35 @@ def printChapterOfClasification(table1,table2,table3):
         tableY1.append(x[3])
     for x in table3:
         tableY2.append(x[3])
-    pylab.plot(tableX, tableY,'ro', color='green')
-    pylab.plot(tableX1,tableY1,'ro', color = 'blue')
-    pylab.plot(tableX2,tableY2, 'ro', color = 'red')
+
+    oryginal = wczytanie()
+    setosa,versicolor,vergenica = podziel_na(oryginal)
+
+    tableX11 = []
+    tableX12 = []
+    tableX13 = []
+    for x in range(len(setosa)):
+        tableX11.append(setosa[x][2])
+    for x in range(len(vergenica)):
+        tableX12.append(vergenica[x][2])
+    for x in range(len(versicolor)):
+        tableX13.append(versicolor[x][2])
+    tableY11 = []
+    tableY12 = []
+    tableY13 = []
+    for x in range(len(setosa)):
+        tableY11.append(setosa[x][3])
+    for x in range(len(vergenica)):
+        tableY12.append(vergenica[x][3])
+    for x in range(len(versicolor)):
+        tableY13.append(versicolor[x][3])
+
+    pylab.plot(tableX, tableY,'bs', color='green')
+    pylab.plot(tableX1,tableY1,'bs', color = 'blue')
+    pylab.plot(tableX2,tableY2, 'bs', color = 'red')
+    pylab.plot(tableX11, tableY11,'+', color='green')
+    pylab.plot(tableX12,tableY12,'+', color = 'blue')
+    pylab.plot(tableX13,tableY13, '+', color = 'red')
     pylab.grid(True)
     pylab.show()
 
@@ -68,24 +151,25 @@ def createTrainData(testAmount):
     #Setos ->      [1,0,0,0]
     #Versicolor -> [0,1,0,0]
     #Verginica ->  [0,0,1,0]
-    i = 0
-    while i<testAmount:
-        i += 1
-        ran = random.randint(1,149)
-        b = []
-        d = []
-        b.append(float(ir[ran][0]))
-        b.append(float(ir[ran][1]))
-        b.append(float(ir[ran][2]))
-        b.append(float(ir[ran][3]))
-        d.append(b)
-        if ir[ran][4] == "Iris-setosa":
-            d.append([1,0,0,0])
-        elif ir[ran][4] == "Iris-versicolor":
-            d.append([0,1,0,0])
-        else:
-            d.append([0,0,1,0])
-        table.append(d)
+    c = 0
+    for j in range(3):
+        for i in range(10):
+            ran = random.randint(c,c+49)
+            b = []
+            d = []
+            b.append(float(ir[ran][0]))
+            b.append(float(ir[ran][1]))
+            b.append(float(ir[ran][2]))
+            b.append(float(ir[ran][3]))
+            d.append(b)
+            if ir[ran][4] == "Iris-setosa":
+                d.append([1,0,0,0])
+            elif ir[ran][4] == "Iris-versicolor":
+                d.append([0,1,0,0])
+            else:
+                d.append([0,0,1,0])
+            table.append(d)
+        c += 50
     return table
 
 def createTestData():
@@ -106,7 +190,7 @@ def createTestData():
 def main():
 
     #dates nedeed to program
-    amountOfTestData = 30
+    amountOfTestData = 100
     iterations = 10000
     learingRate = 0.01
     momentumFactor = 0.1
@@ -114,7 +198,7 @@ def main():
     inputNodes = 4
     hiddenNeurons = 4
     outputNodes = 4
-
+    #------------------------------
 
     pattern = createTrainData(amountOfTestData)
     testData = createTestData()
