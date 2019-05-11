@@ -73,7 +73,10 @@ def printChapterError(table):
     pylab.show()
     pylab.title("Errors of training")
 
-def podziel_na(ir):
+def printChapterOfClasification(table1,table2,table3):
+
+    ir = wczytanie()
+
     table_setosa = []
     table_versicolor = []
     table_verginica = []
@@ -89,10 +92,6 @@ def podziel_na(ir):
         else:
             table_verginica.append(ir[licznik])
             licznik += 1
-
-    return table_setosa,table_versicolor,table_verginica
-
-def printChapterOfClasification(table1,table2,table3):
 
     tableX = []
     tableX1 = []
@@ -113,38 +112,36 @@ def printChapterOfClasification(table1,table2,table3):
     for x in table3:
         tableY2.append(x[3])
 
-    oryginal = wczytanie()
-    setosa,versicolor,vergenica = podziel_na(oryginal)
-
     tableX11 = []
     tableX12 = []
     tableX13 = []
-    for x in range(len(setosa)):
-        tableX11.append(setosa[x][2])
-    for x in range(len(vergenica)):
-        tableX12.append(vergenica[x][2])
-    for x in range(len(versicolor)):
-        tableX13.append(versicolor[x][2])
+    for x in range(len(table_setosa)):
+        tableX11.append(table_setosa[x][2])
+    for x in range(len(table_verginica)):
+        tableX12.append(table_verginica[x][2])
+    for x in range(len(table_versicolor)):
+        tableX13.append(table_versicolor[x][2])
     tableY11 = []
     tableY12 = []
     tableY13 = []
-    for x in range(len(setosa)):
-        tableY11.append(setosa[x][3])
-    for x in range(len(vergenica)):
-        tableY12.append(vergenica[x][3])
-    for x in range(len(versicolor)):
-        tableY13.append(versicolor[x][3])
-
+    for x in range(len(table_setosa)):
+        tableY11.append(table_setosa[x][3])
+    for x in range(len(table_verginica)):
+        tableY12.append(table_verginica[x][3])
+    for x in range(len(table_versicolor)):
+        tableY13.append(table_versicolor[x][3])
+    #Scores of classification
     pylab.plot(tableX, tableY,'bs', color='green')
     pylab.plot(tableX1,tableY1,'bs', color = 'blue')
     pylab.plot(tableX2,tableY2, 'bs', color = 'red')
-    pylab.plot(tableX11, tableY11,'+', color='green')
+    #Oryginal Data
+    pylab.plot(tableX11,tableY11,'+', color='green')
     pylab.plot(tableX12,tableY12,'+', color = 'blue')
     pylab.plot(tableX13,tableY13, '+', color = 'red')
     pylab.grid(True)
     pylab.show()
 
-def createTrainData(testAmount):
+def createTrainData(testAmount,amountOfTypes):
     random.seed()
     ir = readFile("Iris.txt",5)
     table = []
@@ -152,8 +149,8 @@ def createTrainData(testAmount):
     #Versicolor -> [0,1,0,0]
     #Verginica ->  [0,0,1,0]
     c = 0
-    for j in range(3):
-        for i in range(10):
+    for j in range(amountOfTypes):
+        for i in range(int(testAmount/amountOfTypes)):
             ran = random.randint(c,c+49)
             b = []
             d = []
@@ -190,7 +187,8 @@ def createTestData():
 def main():
 
     #dates nedeed to program
-    amountOfTestData = 100
+    amountOfTestData = 30
+    amountOfTypes = 3
     iterations = 10000
     learingRate = 0.01
     momentumFactor = 0.1
@@ -200,7 +198,7 @@ def main():
     outputNodes = 4
     #------------------------------
 
-    pattern = createTrainData(amountOfTestData)
+    pattern = createTrainData(amountOfTestData,amountOfTypes)
     testData = createTestData()
 
     neuralNetwork = NeuralNetwork(inputNodes, hiddenNeurons, outputNodes)
