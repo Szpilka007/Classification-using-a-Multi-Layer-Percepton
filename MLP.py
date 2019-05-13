@@ -19,7 +19,9 @@ def makeMatrix(I, J, fill=0.0):
 
 # our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
 def sigmoid(x):
-    return math.tanh(x)
+    #return math.tanh(x)
+    return 1/(1+math.exp(-x))
+
 
 # derivative of our sigmoid function, in terms of the output (i.e. y)
 def dsigmoid(y):
@@ -58,8 +60,8 @@ class NeuralNetwork:
 
         # input activations
         for i in range(self.ni-1):
-            #self.ai[i] = sigmoid(inputs[i])
-            self.ai[i] = inputs[i]
+            self.ai[i] = sigmoid(inputs[i])
+            #self.ai[i] = inputs[i]
 
         # hidden activations
         for j in range(self.nh):

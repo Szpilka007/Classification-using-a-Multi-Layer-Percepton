@@ -36,7 +36,7 @@ def wczytanie():
                 for pole in linia.split(","):
                     table.append(pole)
 
-        print(len(table))
+
 
         ir = [[]]
         licznik = 0
@@ -190,7 +190,7 @@ def main():
     amountOfTestData = 30
     amountOfTypes = 3
     iterations = 10000
-    learingRate = 0.01
+    learingRate = 0.1
     momentumFactor = 0.1
     # Dates needed to creating MLP
     inputNodes = 4
