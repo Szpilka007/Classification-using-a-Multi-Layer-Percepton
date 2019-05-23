@@ -145,9 +145,9 @@ def createTrainData(testAmount,amountOfTypes):
     random.seed()
     ir = readFile("Iris.txt",5)
     table = []
-    #Setos ->      [1,0,0,0]
-    #Versicolor -> [0,1,0,0]
-    #Verginica ->  [0,0,1,0]
+    #Setos ->      [1,0,0]
+    #Versicolor -> [0,1,0]
+    #Verginica ->  [0,0,1]
     c = 0
     for j in range(amountOfTypes):
         for i in range(int(testAmount/amountOfTypes)):
@@ -160,11 +160,11 @@ def createTrainData(testAmount,amountOfTypes):
             b.append(float(ir[ran][3]))
             d.append(b)
             if ir[ran][4] == "Iris-setosa":
-                d.append([1,0,0,0])
+                d.append([1,0,0])
             elif ir[ran][4] == "Iris-versicolor":
-                d.append([0,1,0,0])
+                d.append([0,1,0])
             else:
-                d.append([0,0,1,0])
+                d.append([0,0,1])
             table.append(d)
         c += 50
     return table
@@ -190,12 +190,12 @@ def main():
     amountOfTestData = 30
     amountOfTypes = 3
     iterations = 10000
-    learingRate = 0.1
-    momentumFactor = 0.1
+    learingRate = 0.01
+    momentumFactor = 0.01
     # Dates needed to creating MLP
     inputNodes = 4
     hiddenNeurons = 4
-    outputNodes = 4
+    outputNodes = 3
     #------------------------------
 
     pattern = createTrainData(amountOfTestData,amountOfTypes)

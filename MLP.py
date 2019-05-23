@@ -4,6 +4,7 @@ import string
 import numpy as np
 import pylab
 from main import printChapterOfClasification
+from scipy.special import expit
 random.seed(0)
 
 # calculate a random number where:  a <= rand < b
@@ -19,8 +20,9 @@ def makeMatrix(I, J, fill=0.0):
 
 # our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
 def sigmoid(x):
-    #return math.tanh(x)
-    return 1/(1+math.exp(-x))
+    return math.tanh(x)  #-1j * np.tan(1j*x).
+    #return 1/(1+math.exp(-x))
+    #return expit(x)
 
 
 # derivative of our sigmoid function, in terms of the output (i.e. y)
@@ -30,7 +32,7 @@ def dsigmoid(y):
 class NeuralNetwork:
     def __init__(self, ni, nh, no):
         # number of input, hidden, and output nodes
-        self.ni = ni + 1 # +1 for bias node
+        self.ni = ni + 1
         self.nh = nh
         self.no = no
 
@@ -55,8 +57,8 @@ class NeuralNetwork:
         self.co = makeMatrix(self.nh, self.no)
 
     def update(self, inputs):
-        if len(inputs) != self.ni-1:
-            raise ValueError('wrong number of inputs')
+        #if len(inputs) != self.ni:
+            #raise ValueError('wrong number of inputs')
 
         # input activations
         for i in range(self.ni-1):
@@ -104,9 +106,8 @@ class NeuralNetwork:
                 change = output_deltas[k]*self.ah[j]
                 self.wo[j][k] = self.wo[j][k] + N*change + M*self.co[j][k]
                 self.co[j][k] = change
-                #print N*change, M*self.co[j][k]
 
-        # update input weights
+        # update hidden weights
         for i in range(self.ni):
             for j in range(self.nh):
                 change = hidden_deltas[j]*self.ai[i]
